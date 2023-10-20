@@ -4,7 +4,7 @@ CREATE DATABASE ecommerce_projeto;
 
 USE ecommerce_projeto;
 
----- Criação das tabelas ----##
+---- Criação das tabelas ----
 
 CREATE TABLE clientes (
 	id_cliente INT AUTO_INCREMENT PRIMARY KEY,
