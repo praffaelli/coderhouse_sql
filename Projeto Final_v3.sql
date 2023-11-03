@@ -534,3 +534,79 @@ INSERT INTO nota_fiscal(data_emissao, valor, numero_nota_fiscal, chave_acesso, i
 ('2023-04-04', 40, 1040, 95243696326171700000, 40), 
 ('2023-04-04', 78, 1041, 18899503823930600000, 41), 
 ('2023-04-05', 62, 1042, 63256736751630200000, 42);
+
+---- Criação Views ----
+
+CREATE VIEW gold_pedidos AS(
+SELECT p.id_pedido,
+		concat(c.primeiro_nome,' ',c.ultimo_nome) AS "nome_cliente",
+        c.razao_social,
+        c.cnpj_cliente,
+        p.quantidade_itens,
+        p.endereco_entrega,
+        c.cidade,
+        c.estado,
+        c.cep,
+        p.cupons,
+        p.descontos,
+        p.valor_total_pedido,
+        p.forma_pagamento,
+        p.prazo_entrega,
+        d.motivo_devolucao,
+        d.forma_estorno,
+        d.custo_retirada,
+        d.data_solicitacao AS "solicitacao_devolucao",
+        d.data_conclusao AS "conclusao_devolucao",
+        t.nome_contato AS "nome_transportadora",
+        nf.numero_nota_fiscal
+FROM pedidos p
+LEFT JOIN clientes c ON p.id_cliente = c.id_cliente
+LEFT JOIN devolucoes d ON p.id_devolucao = d.id_devolucao
+LEFT JOIN transportadora t ON p.id_transportadora = t.id_transportadora
+LEFT JOIN nota_fiscal nf ON p.id_pedido = nf.id_pedido
+ORDER BY p.id_pedido);
+
+CREATE VIEW gold_itens_pedidos AS(
+SELECT ip.id_itens_pedidos,
+		ip.id_pedido as "numero_pedido",
+		pd.nome_produto,
+        pd.marca_peca,
+        pd.modelo_carro,
+        pd.ano_modelo,
+        pd.categoria_peca,
+        pd.valor_produto,
+        nf.numero_nota_fiscal
+FROM itens_pedidos ip
+LEFT JOIN produtos pd ON ip.id_produto = pd.id_produto
+LEFT JOIN nota_fiscal nf ON ip.id_pedido = nf.id_pedido
+ORDER BY id_itens_pedidos);
+
+CREATE VIEW top10_marcas_vendidas AS (
+SELECT marca_peca,
+       COUNT(*) AS "qtde.",
+       SUM(valor_produto) as "valor_total",
+       ROUND(SUM(valor_produto) / COUNT(*), 2) as "ticket_medio"
+FROM gold_itens_pedidos
+GROUP BY marca_peca
+ORDER BY 3 DESC
+LIMIT 10);
+
+CREATE VIEW ranking_motivo_devolucao AS (
+SELECT motivo_devolucao,
+		COUNT(*) AS "qtde.",
+        ROUND(SUM(custo_retirada)) AS "custo_total"
+FROM devolucoes
+GROUP BY motivo_devolucao
+ORDER BY 2 DESC);
+
+CREATE VIEW resultado_vendas_estados AS (
+SELECT estado,
+		COUNT(*) AS "qtde_vendas",
+        ROUND(SUM(valor_total_pedido)) AS "valor_total",
+        ROUND(SUM(valor_total_pedido) / COUNT(*), 2) AS "ticket_medio",
+        COUNT(motivo_devolucao) AS "qtde_devolucoes",
+		ROUND(SUM(custo_retirada)) AS "custo_devolucoes",
+        ROUND(SUM(valor_total_pedido) - SUM(custo_retirada), 2) AS "resultado_estado"
+FROM gold_pedidos
+GROUP BY estado
+ORDER BY 3 DESC);
