@@ -610,3 +610,36 @@ SELECT estado,
 FROM gold_pedidos
 GROUP BY estado
 ORDER BY 3 DESC);
+
+---- Criação Funções ----
+
+DELIMITER //
+CREATE FUNCTION QtdeEntregaPorTransportadora(transportadora VARCHAR(100)) 
+RETURNS INT
+READS SQL DATA
+BEGIN 
+    DECLARE qtde_entregas INT;
+    SELECT COUNT(*) INTO qtde_entregas FROM gold_pedidos 
+    WHERE nome_transportadora = transportadora;
+    RETURN qtde_entregas;
+END;
+//
+DELIMITER;
+
+---- SELECT QtdeEntregaPorTransportadora('Transportadora A') as "Qtde. Entregas Realizadas"; ----
+
+DELIMITER //
+CREATE FUNCTION InformacoesDoPedido(id_pedido INT) 
+RETURNS VARCHAR(255)
+READS SQL DATA
+BEGIN 
+    DECLARE info_pedido VARCHAR(255);
+    SELECT CONCAT('Número Pedido:', gp.id_pedido, ', Nome Cliente:', gp.nome_cliente, ', Valor Pedido:', gp.valor_total_pedido,", Produto: ",  (SELECT nome_produto FROM gold_itens_pedidos WHERE numero_pedido = gp.id_pedido)) INTO info_pedido
+    FROM gold_pedidos gp
+    WHERE gp.id_pedido = id_pedido;
+    RETURN info_pedido;
+END;
+//
+DELIMITER ;
+
+---- SELECT InformacoesDoPedido(2) as "Resumo Pedido" ----
