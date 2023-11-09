@@ -643,3 +643,46 @@ END;
 DELIMITER ;
 
 ---- SELECT InformacoesDoPedido(2) as "Resumo Pedido" ----
+
+---- Criação Stored Procedure ----
+
+/* Store Procedure para ordenar campos específicos da View "resultado_vendas_estados"
+campo: Trata-se do campo da view que deseja realizar a ordenção, sendo possível realizar por qtde_vendas, valor_total, ticket_medio, qtde_devolucoes e resultado_estado.
+ordem: Refere-se ao tipo de ordenação que deseja realizar, ascendente (utilizar o ASC) ou decrescente (utilizar o DESC) */
+
+DELIMITER //
+CREATE PROCEDURE OrdenarVendasEstados(
+	IN campo VARCHAR(100),
+    IN ordem VARCHAR(10))
+BEGIN
+SET @ordenar = CONCAT('SELECT * FROM resultado_vendas_estados', ' ORDER BY ', campo, ' ', ordem);
+    PREPARE RunSQL FROM @ordenar;
+    EXECUTE RunSQL;
+    DEALLOCATE PREPARE RunSQL;
+END //
+
+CALL OrdenarVendasEstados('resultado_estado', 'DESC'); /*Nesse exemplo estamos ordenando de forma descrescente as informações do campo resultado_estado */
+
+/* Store Procedure para inserir um registro na tabela Clientes
+Para a inserção foram utilizados todos os campos da tabela, sendo eles nessa ordem: primeiro_nome, ultimo_nome, cnpj_cliente, razao_social, email_cliente, endereco, cidade, estado, cep */
+
+DELIMITER //
+CREATE PROCEDURE NovoCliente(
+    IN p_nome VARCHAR(100),
+    IN u_nome VARCHAR(100),
+    IN cnpj VARCHAR(18),
+    IN razao_social VARCHAR(200),
+    IN email_cliente VARCHAR(100),
+    IN endereco VARCHAR(200),
+    IN cidade VARCHAR(50),
+    IN estado VARCHAR(50),
+    IN cep VARCHAR(9)
+)
+BEGIN
+    INSERT INTO clientes (primeiro_nome, ultimo_nome, cnpj_cliente, razao_social, email_cliente, endereco, cidade, estado, cep) 
+    VALUES (p_nome, u_nome, cnpj, razao_social, email_cliente, endereco, cidade, estado, cep);
+END //
+DELIMITER ;
+
+CALL NovoCliente('Pedro', 'Raffaelli', 'xxxxxxxxxxxxxxxxxx', 'Empresa A', 'pedro.raffaelli@gmail.com', 'Av. Teste 225', 'São Paulo', 'São Paulo', '99999999');
+/*Nesse exemplo estamos adicionando um novo registo a tabela Clientes*/
