@@ -43,7 +43,7 @@ CREATE TABLE produtos(
 CREATE TABLE estoque(
     id_estoque INT AUTO_INCREMENT PRIMARY KEY,
     id_produto INT,
-    quantidade INT,
+    qtde_estoque INT,
     status_estoque VARCHAR(50),
     id_fornecedor INT);
 
@@ -74,7 +74,8 @@ CREATE TABLE devolucoes(
 CREATE TABLE itens_pedidos(
     id_itens_pedidos INT AUTO_INCREMENT PRIMARY KEY,
     id_produto INT,
-    id_pedido INT);
+    id_pedido INT,
+    quantidade INT);
 
 CREATE TABLE transportadora(
     id_transportadora INT AUTO_INCREMENT PRIMARY KEY,
@@ -340,7 +341,7 @@ INSERT INTO pedidos (id_cliente, quantidade_itens, endereco_entrega, descontos, 
 ('64', '3', '9 Graedel Junction', '0', 'Nenhum', '78', 'Boleto Bancário', '6 dias', null, 1), 
 ('18', '4', '07 Elka Pass', '0', 'Nenhum', '62', 'Transferência', '2 dias', 15, 2);
 
-INSERT INTO estoque (id_produto, quantidade, status_estoque, id_fornecedor) VALUES
+INSERT INTO estoque (id_produto, qtde_estoque, status_estoque, id_fornecedor) VALUES
 (1, 0, 'Indisponível', 14), 
 (2, 97, 'Em estoque', 9), 
 (3, 73, 'Em estoque', 7), 
@@ -392,104 +393,104 @@ INSERT INTO estoque (id_produto, quantidade, status_estoque, id_fornecedor) VALU
 (49, 0, 'Indisponível', 6), 
 (50, 50, 'Em estoque', 13);
 
-INSERT INTO itens_pedidos (id_produto, id_pedido) VALUES
-(23, 1), 
-(20, 1), 
-(9, 2), 
-(43, 3), 
-(27, 3), 
-(10, 3), 
-(22, 4), 
-(25, 4), 
-(13, 5), 
-(42, 6), 
-(13, 6), 
-(38, 6), 
-(19, 6), 
-(38, 7), 
-(2, 8), 
-(10, 8), 
-(36, 9), 
-(4, 9), 
-(6, 9), 
-(35, 10), 
-(7, 10), 
-(47, 11), 
-(46, 12), 
-(11, 12), 
-(26, 12), 
-(50, 13), 
-(48, 13), 
-(33, 13), 
-(44, 13), 
-(34, 14), 
-(10, 15), 
-(14, 15), 
-(7, 16), 
-(20, 16), 
-(15, 16), 
-(17, 17), 
-(44, 17), 
-(34, 18), 
-(34, 19), 
-(50, 19), 
-(12, 19), 
-(43, 19), 
-(25, 20), 
-(30, 20), 
-(17, 21), 
-(35, 21), 
-(34, 21), 
-(27, 22), 
-(46, 23), 
-(9, 23), 
-(29, 24), 
-(37, 24), 
-(12, 24), 
-(12, 24), 
-(40, 25), 
-(29, 26), 
-(35, 26), 
-(50, 27), 
-(40, 27), 
-(27, 27), 
-(28, 28), 
-(37, 28), 
-(19, 28), 
-(44, 28), 
-(26, 29), 
-(32, 30), 
-(26, 30), 
-(4, 31), 
-(23, 31), 
-(28, 31), 
-(11, 32), 
-(13, 33), 
-(2, 33), 
-(28, 34), 
-(29, 34), 
-(46, 34), 
-(20, 34), 
-(13, 35), 
-(21, 36), 
-(39, 36), 
-(3, 37), 
-(20, 37), 
-(44, 37), 
-(11, 38), 
-(26, 39), 
-(19, 39), 
-(19, 39), 
-(32, 39), 
-(10, 40), 
-(6, 40), 
-(21, 41), 
-(5, 41), 
-(5, 41), 
-(10, 42), 
-(42, 42), 
-(48, 42), 
-(31, 42); 
+INSERT INTO itens_pedidos (id_produto, id_pedido, quantidade) VALUES
+(23, 1, 1), 
+(20, 1, 1), 
+(9, 2, 1), 
+(43, 3, 1), 
+(27, 3, 1), 
+(10, 3, 1), 
+(22, 4, 1), 
+(25, 4, 1), 
+(13, 5, 1), 
+(42, 6, 1), 
+(13, 6, 1), 
+(38, 6, 1), 
+(19, 6, 1), 
+(38, 7, 1), 
+(2, 8, 1), 
+(10, 8, 1), 
+(36, 9, 1), 
+(4, 9, 1), 
+(6, 9, 1), 
+(35, 10, 1), 
+(7, 10, 1), 
+(47, 11, 1), 
+(46, 12, 1), 
+(11, 12, 1), 
+(26, 12, 1), 
+(50, 13, 1), 
+(48, 13, 1), 
+(33, 13, 1), 
+(44, 13, 1), 
+(34, 14, 1), 
+(10, 15, 1), 
+(14, 15, 1), 
+(7, 16, 1), 
+(20, 16, 1), 
+(15, 16, 1), 
+(17, 17, 1), 
+(44, 17, 1), 
+(34, 18, 1), 
+(34, 19, 1), 
+(50, 19, 1), 
+(12, 19, 1), 
+(43, 19, 1), 
+(25, 20, 1), 
+(30, 20, 1), 
+(17, 21, 1), 
+(35, 21, 1), 
+(34, 21, 1), 
+(27, 22, 1), 
+(46, 23, 1), 
+(9, 23, 1), 
+(29, 24, 1), 
+(37, 24, 1), 
+(12, 24, 1), 
+(12, 24, 1), 
+(40, 25, 1), 
+(29, 26, 1), 
+(35, 26, 1), 
+(50, 27, 1), 
+(40, 27, 1), 
+(27, 27, 1), 
+(28, 28, 1), 
+(37, 28, 1), 
+(19, 28, 1), 
+(44, 28, 1), 
+(26, 29, 1), 
+(32, 30, 1), 
+(26, 30, 1), 
+(4, 31, 1), 
+(23, 31, 1), 
+(28, 31, 1), 
+(11, 32, 1), 
+(13, 33, 1), 
+(2, 33, 1), 
+(28, 34, 1), 
+(29, 34, 1), 
+(46, 34, 1), 
+(20, 34, 1), 
+(13, 35, 1), 
+(21, 36, 1), 
+(39, 36, 1), 
+(3, 37, 1), 
+(20, 37, 1), 
+(44, 37, 1), 
+(11, 38, 1), 
+(26, 39, 1), 
+(19, 39, 1), 
+(19, 39, 1), 
+(32, 39, 1), 
+(10, 40, 1), 
+(6, 40, 1), 
+(21, 41, 1), 
+(5, 41, 1), 
+(5, 41, 1), 
+(10, 42, 1), 
+(42, 42, 1), 
+(48, 42, 1), 
+(31, 42, 1); 
 
 INSERT INTO nota_fiscal(data_emissao, valor, numero_nota_fiscal, chave_acesso, id_pedido) VALUES
 ('2023-02-05', 16, 1001, 33125128100324900000, 1), 
@@ -640,7 +641,7 @@ BEGIN
     RETURN info_pedido;
 END;
 //
-DELIMITER ;
+DELIMITER;
 
 ---- SELECT InformacoesDoPedido(2) as "Resumo Pedido" ----
 
@@ -659,7 +660,9 @@ SET @ordenar = CONCAT('SELECT * FROM resultado_vendas_estados', ' ORDER BY ', ca
     PREPARE RunSQL FROM @ordenar;
     EXECUTE RunSQL;
     DEALLOCATE PREPARE RunSQL;
-END //
+END;
+//
+DELIMITER;
 
 CALL OrdenarVendasEstados('resultado_estado', 'DESC'); /*Nesse exemplo estamos ordenando de forma descrescente as informações do campo resultado_estado */
 
@@ -681,8 +684,72 @@ CREATE PROCEDURE NovoCliente(
 BEGIN
     INSERT INTO clientes (primeiro_nome, ultimo_nome, cnpj_cliente, razao_social, email_cliente, endereco, cidade, estado, cep) 
     VALUES (p_nome, u_nome, cnpj, razao_social, email_cliente, endereco, cidade, estado, cep);
-END //
-DELIMITER ;
+END;
+//
+DELIMITER;
 
 CALL NovoCliente('Pedro', 'Raffaelli', 'xxxxxxxxxxxxxxxxxx', 'Empresa A', 'pedro.raffaelli@gmail.com', 'Av. Teste 225', 'São Paulo', 'São Paulo', '99999999');
 /*Nesse exemplo estamos adicionando um novo registo a tabela Clientes*/
+
+---- Criação Trigger ----
+
+/* Essa Trigger verifica através do campo cnpj_cliente se há algum cadastro com o número que de CNPJ que estou tentando inserir.
+Caso haja, a Trigger retorna a mensagem de "CNPJ já cadastrado.". Caso não haja esse número de CNPJ na base de clientes, ele insere
+o novo registro e retorna a mensagem "Cliente cadastrado com sucesso!" */
+
+DELIMITER //
+CREATE TRIGGER verificar_cliente_existente
+BEFORE INSERT ON clientes
+FOR EACH ROW
+BEGIN
+    DECLARE cliente_existente INT;
+    SELECT COUNT(*) INTO cliente_existente FROM clientes WHERE cnpj_cliente = NEW.cnpj_cliente;
+        IF cliente_existente > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CNPJ já cadastrado.';
+    END IF;
+END;
+//
+DELIMITER ;
+
+/* Entender o que há de errado na Trigger abaixo. A intenção era que caso não houvesse o CNPJ já cadastrado, 
+ele realizasse o cadastro do novo cliente e retornasse a mensagem "Cliente cadastrado com sucesso!"
+O MySQL retorna o erro: "Error Code: 1407. Bad SQLSTATE: '00000'". Em um material no Wikipédia, diz que esse código
+trata-se de um aviso de Conclusão Bem Sucedida. Link: https://en.wikipedia.org/wiki/SQLSTATE
+
+DELIMITER //
+CREATE TRIGGER verificar_cliente_existente
+BEFORE INSERT ON clientes
+FOR EACH ROW
+BEGIN
+    DECLARE cliente_existente INT;
+    SELECT COUNT(*) INTO cliente_existente FROM clientes WHERE cnpj_cliente = NEW.cnpj_cliente;
+        IF cliente_existente > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CNPJ já cadastrado.';
+        ELSE 
+		SIGNAL SQLSTATE '00000' SET MESSAGE_TEXT = 'Cliente cadastrado com sucesso!';
+    END IF;
+END;
+//
+DELIMITER ; */
+
+/* Já essa Trigger, é responsável por atualizar a quantidade do produto disponível no estoque, após um novo item ser
+adicionado na itens_pedidos. Caso o valor do estoque passe a ser inferior a 0, o status_estoque é atualizado para 'Indisponível'. */
+
+DELIMITER //
+CREATE TRIGGER atualizar_estoque
+AFTER INSERT ON itens_pedidos
+FOR EACH ROW
+BEGIN
+    DECLARE quantidade_restante INT;
+    UPDATE estoque SET qtde_estoque = qtde_estoque - NEW.quantidade
+    WHERE id_produto = NEW.id_produto;
+    SELECT qtde_estoque INTO quantidade_restante
+    FROM estoque
+    WHERE id_produto = NEW.id_produto;
+    IF quantidade_restante =< 0 THEN
+        UPDATE estoque SET status_estoque = 'Indisponível'
+        WHERE id_produto = NEW.id_produto;
+    END IF;
+END;
+//
+DELIMITER;
