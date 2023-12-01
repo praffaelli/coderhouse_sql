@@ -85,7 +85,7 @@ CREATE TABLE transportadora(
 
 ---- Inclusão das FOREIGN KEYS nas tabelas ----
 ALTER TABLE pedidos
-ADD FOREIGN KEY (id_cliente) REFERENCES ecommerce_projeto.clientes(id_cliente),
+ADD FOREIGN KEY (id_cliente) REFERENCES ecommerce_projeto.clientes(id_cliente) ON DELETE CASCADE,
 ADD FOREIGN KEY (id_devolucao) REFERENCES ecommerce_projeto.devolucoes(id_devolucao),
 ADD FOREIGN KEY (id_transportadora) REFERENCES ecommerce_projeto.transportadora(id_transportadora);
 
@@ -758,8 +758,8 @@ DELIMITER ;
 /* No backup abaixo, foram incluídas os dados das 9 tabelas do banco de dados. São elas:
 clientes, devolucoes, estoque, fornecedores, itens_pedidos, nota_fiscal, pedidos, produtos e transportadora. */
 
-CREATE USER 'felipe@localhost' IDENTIFIED BY 'felipe@2023' ---- Criação do usuário felipe@localhost
-CREATE USER 'uilson@localhost' IDENTIFIED BY 'uil@2023' ---- Criação do usuário uilson@localhost
+CREATE USER 'felipe@localhost' IDENTIFIED BY 'felipe@2023' /* Criação do usuário felipe@localhost */
+CREATE USER 'uilson@localhost' IDENTIFIED BY 'uil@2023' /* Criação do usuário uil@localhost */
 
 /* Verificar com o Felipe/Uil, como incluir a criptografia na criação das senhas */
 
@@ -769,6 +769,39 @@ GRANT SELECT, INSERT, UPDATE ON ecommerce_projeto.* TO 'uilson@localhost' ---- I
 REVOKE DELETE ON ecommerce_projeto.* FROM 'felipe@localhost' ---- Revogação da possibilidade de deletar informações das tabelas
 REVOKE DELETE ON ecommerce_projeto.* FROM 'uilson@localhost' ---- Revogação da possibilidade de deletar informações das tabelas
 
+---- Criação Sublinguagem TCL ----
+
+/* Eliminar registros */
+
+SET foreign_key_checks = 0;
+
+START TRANSACTION;
+
+DELETE FROM clientes
+WHERE id_cliente in ('5', '10', '15');
+
+ROLLBACK;
+COMMIT;
+
+SET foreign_key_checks = 1;
+
+/* Inserir registros */
+
+START TRANSACTION;
+
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-06-05', 'Transportadora F', 'contato@transportadoraF.com');
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-07-10', 'Transportadora G', 'contato@transportadoraG.com');
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-08-15', 'Transportadora H', 'contato@transportadoraH.com');
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-09-20', 'Transportadora I', 'contato@transportadoraI.com');
+SAVEPOINT insercao1;
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-10-25', 'Transportadora J', 'contato@transportadoraJ.com');
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-11-30', 'Transportadora K', 'contato@transportadoraK.com');
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2022-12-05', 'Transportadora L', 'contato@transportadoraL.com');
+INSERT INTO transportadora (data_cadastro, nome_contato, email_transportadora) VALUES ('2023-01-10', 'Transportadora N', 'contato@transportadoraM.com');
+SAVEPOINT insercao2;
+
+ROLLBACK TO insercao1; /* Eliminação do SAVEPOINT dos 4 primeiros registros*/
+COMMIT;
 
 ---- Criação Backup ----
 /* No backup abaixo, foram incluídas os dados das 9 tabelas do banco de dados. São elas:
